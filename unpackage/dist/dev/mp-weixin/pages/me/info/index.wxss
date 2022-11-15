@@ -1,0 +1,17 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+page {
+  background-color: #ffffff;
+}
+.cu-avatar {
+  border: 2px solid #eaeaea;
+}
+.cu-avatar .icon {
+  font-size: 170px;
+}
+.demo-uni-col {
+  height: 36px;
+  border-radius: 5px;
+}
+
