@@ -4,13 +4,21 @@
     <view class="text-area">
       <text class="title">鲸战队</text>
     </view>
+	<myVideo></myVideo>
   </view>
 </template>
 
 <script>
+  import myVideo from '@/components/mycomponents/my-video/my-video.vue'
   export default {
-    onLoad: function() {
-    }
+	  components:{
+		 myVideo
+	  },
+	onLoad: function() {
+	  	
+	  },
+	  methods: {
+	}
   }
 </script>
 
