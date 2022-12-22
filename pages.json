@@ -30,6 +30,12 @@
 		  "style": {
 		    "navigationBarTitleText": "个人信息"
 		  }
+		},
+		{
+		  "path": "pages/course/chapter",
+		  "style": {
+		     "navigationBarTitleText": "课程信息"
+		  }
 		}
 	],
 	"tabBar": {
@@ -62,9 +68,8 @@
 		"navigationBarBackgroundColor": "#FFFFFF"
 	},
 	"easycom": {
-			"autoscan": true,
 			"custom": {
-				"tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue"
+				"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
 			}
 		}
 }

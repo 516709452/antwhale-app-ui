@@ -1,66 +1,100 @@
 <template>
 	<view>
-		<tui-tabs :tabs="tabs" :currentTab="currentTab" @change="changeTab" />
-		<uni-list :border="true">
-			<!-- 显示圆形头像 -->
-			<uni-list-item title="列表左侧带略缩图" note="列表描述信息" rightText="右侧文字">
-				<template v-slot:header>
-					<view class="uni-thumb">
-						<image src="/static/logo.png" mode="aspectFill"></image>
-					</view>
-				</template>
-			</uni-list-item>
-		</uni-list>
+		<u-row align="top">
+			<u-col span="3">
+				<u-cell :title="item.label" v-for="(item, index) in subjectList" :key="index"
+					@click="getSubjectSonInfo(item.id)">
+				</u-cell>
+			</u-col>
+			<u-col span="9">
+				<view v-if="subjectSonList.length===0">
+					<u-empty mode="search" icon="http://cdn.uviewui.com/uview/empty/car.png">
+					</u-empty>
+				</view>
+				<view v-else>
+					<u-tabs :list="subjectSonList" @click="getCourseInfo"></u-tabs>
+					<uni-list :border="true">
+						<!-- 显示圆形头像 -->
+						<uni-list-item :title="item.title"  link :to="`/pages/course/chapter?courseId=${item.id}`" :note="`浏览量:${item.buyCount}`" :rightText="`${item.price}￥`"  v-for="(item, index) in cousreList" :key="index">
+							<template v-slot:header>
+								<view class="uni-thumb">
+									<image :src="item.cover" mode="aspectFill"></image>
+								</view>
+							</template>
+						</uni-list-item>
+					</uni-list>
+				</view>
+			</u-col>
+		</u-row>
 	</view>
 </template>
 
 <script>
+	import {
+		querySubjectInfo
+	} from '@/api/course/subject.js'
+	import {
+		queryCourseInfo
+	} from '@/api/course/course.js'
+
 	export default {
 		components: {},
 		data() {
 			return {
-				info: [{
-						colorClass: 'uni-bg-red',
-						url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/094a9dc0-50c0-11eb-b680-7980c8a877b8.jpg',
-						content: '内容 A'
-					},
-					{
-						colorClass: 'uni-bg-green',
-						url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/094a9dc0-50c0-11eb-b680-7980c8a877b8.jpg',
-						content: '内容 B'
-					},
-					{
-						colorClass: 'uni-bg-blue',
-						url: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/094a9dc0-50c0-11eb-b680-7980c8a877b8.jpg',
-						content: '内容 C'
-					}
-				],
-				current: 0,
+				subjectList: [], //课程目录
+				subjectSonList: [], //课程子目录
+				cousreList:[],//课程列表
 				mode: 'round',
-				swiperDotIndex: 0,
-				currentTab: 0,
-				tabs: [{
-					name: "训练课程",
-					disabled: true
-				}, {
-					name: "饮食课程",
-					disabled: true
-				}, {
-					name: "基础课程",
-					disabled: true
-				}]
 			}
 		},
-		onLoad() {},
+		onLoad() {
+			this.getSubjectInfo()
+		},
 		methods: {
-			change(e) {
-				this.current = e.detail.current
+			change(e) {},
+			clickItem(e) {},
+			changeTab(n) {},
+			//课程类目
+			getSubjectInfo() {
+				querySubjectInfo().then(res => {
+					this.subjectList = res.data
+				}).catch(
+					err => {
+						console.log(err)
+					})
 			},
-			clickItem(e) {
-				this.swiperDotIndex = e
+			//课程子类目
+			getSubjectSonInfo(subjectId) {
+				this.subjectSonList = []
+				this.subjectList.forEach(subject => {
+					if (subject.id !== subjectId) {
+						return
+					}
+					subject.children.forEach(subjectChildren => {
+						let subjectSon = {}
+						subjectSon.name = subjectChildren.label
+						subjectSon.id = subjectChildren.id
+						this.subjectSonList.push(subjectSon)
+					})
+
+				})
 			},
-			changeTab(n) {
-				this.currentTab = n.index
+			//课程列表
+			getCourseInfo(subjectSon) {
+				let courseParam = {
+					subjectId:subjectSon.id
+				}
+				queryCourseInfo(courseParam).then(res => {
+					this.cousreList =res.data
+				}).catch(
+					err => {
+						console.log(err)
+					})
+			},
+			//点击课程进入课程详细页面
+			gotoCoursePage(subjectSon){
+				debugger
+				console.log(subjectSon)
 			}
 		}
 	}

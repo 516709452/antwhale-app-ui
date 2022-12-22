@@ -15,6 +15,8 @@ App.mpType = 'app'
 const app = new Vue({ ...App })
 app.$mount()
 // #endif
+import uView from '@/uni_modules/uview-ui'
+Vue.use(uView)
 
 // 创建引入阿里云播放文件
 function loadScriptString(src) {

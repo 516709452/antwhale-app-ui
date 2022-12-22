@@ -7,7 +7,7 @@
 		<view class="login-form-content">
 			<view class="input-item flex align-center">
 				<view class="iconfont icon-user icon"></view>
-				<input v-model="loginForm.account" class="input" type="text" placeholder="请输入账号" maxlength="30" />
+				<input v-model="loginForm.username" class="input" type="text" placeholder="请输入账号" maxlength="30" />
 			</view>
 			<view class="input-item flex align-center">
 				<view class="iconfont icon-password icon"></view>
@@ -40,13 +40,15 @@
 				cacheswitch: true,
 				globalConfig: getApp().globalData.config,
 				loginForm: {
-					account: "",
+					username: "",
 					password: "",
 					code: "",
 					uuid: ''
 				},
 				userInfo:{
-					
+					username:"",
+					userId:"",
+					avatar:""
 				}
 			}
 		},
@@ -76,7 +78,7 @@
 			},
 			// 登录方法
 			async handleLogin() {
-				if (this.loginForm.account === "") {
+				if (this.loginForm.username === "") {
 					this.$modal.msgError("请输入您的账号")
 				} else if (this.loginForm.password === "") {
 					this.$modal.msgError("请输入您的密码")
@@ -90,7 +92,9 @@
 			// 密码登录
 			async pwdLogin() {
 				this.$store.dispatch('Login', this.loginForm).then(res => {
-					this.userInfo = res.data.commonUserInfo
+					this.userInfo.username = res.data.username
+					this.userInfo.userId = res.data.userId
+					this.userInfo.avatar = res.data.avatar
 					this.$modal.closeLoading()
 					this.loginSuccess()
 				}).catch(() => {
