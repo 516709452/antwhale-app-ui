@@ -15,6 +15,7 @@
 	  },
 	  onLoad: function() {
 	  	setTimeout(()=>{
+			debugger
 	  			this.getLive(1)
 	  		}, 300)
 	  },
@@ -23,7 +24,7 @@
 			 new Aliplayer({
 				   id: "J_prismPlayer",
 				        source:
-				          "https://outin-80aa088e335f11eda17f00163e1c955c.oss-cn-shanghai.aliyuncs.com/sv/1726be4e-18336d2cd9a/1726be4e-18336d2cd9a.mp4?Expires=1663080913&OSSAccessKeyId=LTAI3DkxtsbUyNYV&Signature=IOEewyrkuYr3ArC3ofEaUDfU048%3D",
+				          "https://outin-27eb41ff7eab11ed8ca600163e10c0b7.oss-cn-beijing.aliyuncs.com/sv/3ba91332-1852de48fb4/3ba91332-1852de48fb4.mp4?Expires=1671790327&OSSAccessKeyId=LTAI4FocoL6tuCdYhuvug6Ee&Signature=yhp24BnkkvuCBuKo%2FxkzsOT2ynk%3D",
 				        width: "100%",
 				        height: "500px",
 				        /* To set an album art, you must set 'autoplay' and 'preload' to 'false' */

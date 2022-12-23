@@ -15,7 +15,9 @@
 					<u-tabs :list="subjectSonList" @click="getCourseInfo"></u-tabs>
 					<uni-list :border="true">
 						<!-- 显示圆形头像 -->
-						<uni-list-item :title="item.title"  link :to="`/pages/course/chapter?courseId=${item.id}`" :note="`浏览量:${item.buyCount}`" :rightText="`${item.price}￥`"  v-for="(item, index) in cousreList" :key="index">
+						<uni-list-item :title="item.title" link :to="`/pages/course/course?courseId=${item.id}`"
+							:note="`浏览量:${item.buyCount}`" :rightText="`${item.price}￥`"
+							v-for="(item, index) in cousreList" :key="index">
 							<template v-slot:header>
 								<view class="uni-thumb">
 									<image :src="item.cover" mode="aspectFill"></image>
@@ -43,7 +45,7 @@
 			return {
 				subjectList: [], //课程目录
 				subjectSonList: [], //课程子目录
-				cousreList:[],//课程列表
+				cousreList: [], //课程列表
 				mode: 'round',
 			}
 		},
@@ -56,8 +58,10 @@
 			changeTab(n) {},
 			//课程类目
 			getSubjectInfo() {
-				querySubjectInfo().then(res => {
+				querySubjectInfo().then(async res => {
 					this.subjectList = res.data
+					this.getSubjectSonInfo(res.data[0].id)
+					// this.getCourseInfo(this.subjectSonList[0])
 				}).catch(
 					err => {
 						console.log(err)
@@ -76,24 +80,23 @@
 						subjectSon.id = subjectChildren.id
 						this.subjectSonList.push(subjectSon)
 					})
-
+					this.getCourseInfo(this.subjectSonList[0])
 				})
 			},
 			//课程列表
 			getCourseInfo(subjectSon) {
 				let courseParam = {
-					subjectId:subjectSon.id
+					subjectId: subjectSon.id
 				}
 				queryCourseInfo(courseParam).then(res => {
-					this.cousreList =res.data
+					this.cousreList = res.data
 				}).catch(
 					err => {
 						console.log(err)
 					})
 			},
 			//点击课程进入课程详细页面
-			gotoCoursePage(subjectSon){
-				debugger
+			gotoCoursePage(subjectSon) {
 				console.log(subjectSon)
 			}
 		}

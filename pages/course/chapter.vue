@@ -1,33 +1,19 @@
 <template>
-	<view class="outer-view">
-		<u-row>
-			<!-- <u-swiper :list="" keyName="url" :autoplay="false"></u-swiper> -->
-		</u-row>
-		<u-row>
-			<uni-card title="讲师姓名" :isFull="true" sub-title="高级运动营养师" extra="讲师信息" :thumbnail="avatar">
-				<text class="uni-body">力量训练是一切训练的基础</text>
-			</uni-card>
-		</u-row>
-		<u-row>
-			<uni-section title="课程大纲" type="line" style="width: 100%;" titleFontSize="16px">
-				<u-collapse ref="collapseRef" @change="change" @close="close" @open="open" :accordion="true">
-					<u-collapse-item :title="item.title" :name="item.id" v-for="(item, index) in chapterList"
-						:key="index">
-						<u-list ref="videoListRef" @scrolltolower="scrolltolower" :height="videoListHeight">
-							<u-list-item v-for="(item, index) in videoList" :key="index">
-								<u-cell :title="item.title"></u-cell>
-							</u-list-item>
-						</u-list>
-					</u-collapse-item>
-				</u-collapse>
-			</uni-section>
-		</u-row>
-		<view class="goods-nav-footer">
-			<view>
-				<uni-goods-nav :fill="true" :options="options" :button-group="customButtonGroup" @click="onClick"
-					@buttonClick="buttonClick" />
-			</view>
+	<view>
+		<view id="J_prismPlayer">
+
 		</view>
+		<uni-section title="课程大纲" type="line" style="width: 100%;" titleFontSize="16px">
+			<u-collapse ref="collapseRef" @change="change" @close="close" @open="open" :accordion="true">
+				<u-collapse-item :title="item.title" :name="item.id" v-for="(item, index) in chapterList" :key="index">
+					<u-list ref="videoListRef" @scrolltolower="scrolltolower" :height="videoListHeight">
+						<u-list-item v-for="(item, index) in videoList" :key="index">
+							<u-cell :title="item.title" @click="getVideoUrl(item)"></u-cell>
+						</u-list-item>
+					</u-list>
+				</u-collapse-item>
+			</u-collapse>
+		</uni-section>
 	</view>
 </template>
 
@@ -35,24 +21,24 @@
 	import {
 		queryChapterInfo
 	} from '@/api/course/chapter.js'
-	import { isNull } from '@/utils/validUtil.js'
+	import {
+		queryVodAliyunPalyAuth,
+		queryVodAliyunAddress
+	} from '@/api/course/vod.js'
+	import {
+		isNull
+	} from '@/utils/validUtil.js'
+	import myVideo from '@/components/mycomponents/my-video/my-video.vue'
 	export default {
+
 		data() {
 			return {
 				courseId: '', //课程子目录id
 				chapterList: [], //章节列表
 				videoList: [], //课程列表
 				videoListHeight: '250rpx', //videoList列表高度
-				avatar: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png',
-				options: [{
-					icon: 'chat',
-					text: '客服'
-				}],
-				customButtonGroup: [{
-					text: '立即购课',
-					backgroundColor: 'linear-gradient(90deg, #1E83FF, #0053B8)',
-					color: '#fff'
-				}]
+				playURL: '', //播放地址
+				videoPlayer: null
 			}
 		},
 		onLoad: function(option) {
@@ -60,25 +46,19 @@
 			let chapterParam = {
 				courseId: this.courseId
 			}
-			queryChapterInfo(chapterParam).then(res => {
+			queryChapterInfo(chapterParam).then(async res => {
 				this.chapterList = res.data
-				console.log(this.chapterList)
+				let videoSourceId = this.chapterList[0].children[0].videoSourceId
+				let vodAliyunAddressParamDTO = {
+					videoId: videoSourceId
+				}
+				await this.getVodAliyunAddress(vodAliyunAddressParamDTO);
 			}).catch(
 				err => {
 					console.log(err)
 				})
 		},
 		methods: {
-			onClick(e) {
-				uni.showToast({
-					title: `点击${e.content.text}`,
-					icon: 'none'
-				})
-			},
-			buttonClick(e) {
-				console.log(e)
-				this.options[2].info++
-			},
 			open(e) {
 				this.videoList = []
 				this.chapterList.forEach(chapter => {
@@ -91,31 +71,61 @@
 			close(e) {
 				this.videoList = []
 			},
-			change(e) {}
+			change(e) {},
+			getLive() {
+				this.videoPlayer = new Aliplayer({
+					id: "J_prismPlayer",
+					source: this.playURL,
+					width: "100%",
+					height: "200px",
+					/* To set an album art, you must set 'autoplay' and 'preload' to 'false' */
+					autoplay: false,
+					preload: false,
+					isLive: false,
+					skinLayout: [{
+						name: "bigPlayButton",
+						align: "blabs",
+						x: 10,
+						y: 10
+					}]
+					// id: 'J_prismPlayer',
+					// playauth: this.palyAyth,//视频的播放凭证，可以在通用媒体管理服务控制台获取。
+				}, function(player) {
+					player.play()
+				});
+
+				// 也可以使用replayByMediaAuth函数切换不同的mediaAuth播放（前提是已经使用mediaAuth初始化播放器）。
+				// player.replayByMediaAuth('another mediaAuth');
+			},
+			//得到视频播放地址
+			async getVodAliyunAddress(vodAliyunAddressParamDTO) {
+				await queryVodAliyunAddress(vodAliyunAddressParamDTO).then(res => {
+					this.playURL = res.data.body.playInfoList.playInfo[0].playURL
+					setTimeout(() => {
+						console.log(this.playURL)
+						this.getLive()
+					}, 60)
+				}).catch(
+					err => {
+						console.log(err)
+					})
+			},
+			//点击小节列表播放视频
+			async getVideoUrl(video) {
+				let videoSourceId = video.videoSourceId
+				if (isNull(videoSourceId)) {
+					this.$modal.msgError("该小节还未上传视频")
+					return
+				}
+				let vodAliyunAddressParamDTO = {
+					videoId: videoSourceId
+				}
+				this.videoPlayer.dispose();
+				await this.getVodAliyunAddress(vodAliyunAddressParamDTO);
+			}
 		}
 	}
 </script>
 
-<style>
-	uni-page-body,
-	html,
-	body {
-		height: 100%;
-	}
-</style>
 <style lang="scss" scoped>
-	.outer-view {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.goods-nav-footer {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-	}
-
-	;
 </style>

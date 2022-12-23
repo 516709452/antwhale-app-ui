@@ -32,9 +32,15 @@
 		  }
 		},
 		{
-		  "path": "pages/course/chapter",
+		  "path": "pages/course/course",
 		  "style": {
 		     "navigationBarTitleText": "课程信息"
+		  }
+		},
+		{
+		  "path": "pages/course/chapter",
+		  "style": {
+		     "navigationBarTitleText": "章节信息"
 		  }
 		}
 	],
