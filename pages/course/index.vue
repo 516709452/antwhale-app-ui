@@ -61,7 +61,6 @@
 				querySubjectInfo().then(async res => {
 					this.subjectList = res.data
 					this.getSubjectSonInfo(res.data[0].id)
-					// this.getCourseInfo(this.subjectSonList[0])
 				}).catch(
 					err => {
 						console.log(err)
