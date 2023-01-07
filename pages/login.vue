@@ -32,7 +32,12 @@
 </template>
 
 <script>
-	import {getCodeImg} from '@/api/login'
+	import {
+		getCodeImg
+	} from '@/api/login'
+	import {
+		queryUserCourse
+	} from '@/api/user/search.js'
 	export default {
 		data() {
 			return {
@@ -45,10 +50,11 @@
 					code: "",
 					uuid: ''
 				},
-				userInfo:{
-					username:"",
-					userId:"",
-					avatar:""
+				userInfo: {
+					username: "",
+					userId: "",
+					avatar: "",
+					courseId: []
 				}
 			}
 		},
@@ -95,8 +101,13 @@
 					this.userInfo.username = res.data.username
 					this.userInfo.userId = res.data.userId
 					this.userInfo.avatar = res.data.avatar
-					this.$modal.closeLoading()
-					this.loginSuccess()
+					//查用户已经拥有的课程
+					queryUserCourse(res.data.userId).then(res => {
+						this.userInfo.courseId = res.data.map(userCourseInfo=>{return userCourseInfo.courseId})
+						this.$modal.closeLoading()
+						this.loginSuccess()
+					})
+
 				}).catch(() => {
 					this.$modal.closeLoading()
 					if (this.cacheswitch) {
@@ -107,7 +118,7 @@
 			// 登录成功后，处理函数
 			loginSuccess() {
 				// 设置用户信息
-				this.$store.dispatch('SetUserInfo',this.userInfo)
+				this.$store.dispatch('SetUserInfo', this.userInfo)
 				this.$tab.reLaunch('/pages/index')
 			}
 		}

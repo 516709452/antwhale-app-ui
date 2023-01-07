@@ -3,7 +3,8 @@ const constant = {
    name: 'vuex_name',
    roles: 'vuex_roles',
    permissions: 'vuex_permissions',
-   userId: 'vuex_userId'
+   userId: 'vuex_userId',
+   courseId:'vuex_courseId'
  }
 
  export default constant

@@ -135,7 +135,7 @@
 				this.$modal.showToast('队长微信：516709452')
 			},
 			handleMyCourse() {
-				this.$modal.showToast('我的课程~')
+				this.$tab.navigateTo('/pages/me/info/mycourse')
 			}
 		}
 	}

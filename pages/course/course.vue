@@ -45,6 +45,7 @@
 		data() {
 			return {
 				courseId: '', //课程子目录id
+				courseIdlist:[],//该账号拥有的课程id列表
 				chapterList: [], //章节列表
 				videoList: [], //课程列表
 				videoListHeight: '250rpx', //videoList列表高度
@@ -62,6 +63,12 @@
 		},
 		onLoad: function(option) {
 			this.courseId = option.courseId
+			this.courseIdlist = this.$store.state.user.courseId
+			if(this.courseIdlist.indexOf(this.courseId)!==-1){
+				this.customButtonGroup[0].text = "立即观看"
+			}else{
+				this.customButtonGroup[0].text = "立即购课"
+			}
 			let chapterParam = {
 				courseId: this.courseId
 			}

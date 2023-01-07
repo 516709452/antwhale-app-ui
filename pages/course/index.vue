@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<u-row>
+			<u-search placeholder="搜索课程"  @focus="openSearchPage" shape="round" :clearabled="true" :showAction="false" bgColor="#f2f2f2" borderColor="#cccacc"></u-search>
+		</u-row>
 		<u-row align="top">
 			<u-col span="3">
 				<u-cell :title="item.label" v-for="(item, index) in subjectList" :key="index"
@@ -56,6 +59,11 @@
 			change(e) {},
 			clickItem(e) {},
 			changeTab(n) {},
+			openSearchPage(){
+				uni.navigateTo({
+					url: '/pages/search/index'
+				});
+			},
 			//课程类目
 			getSubjectInfo() {
 				querySubjectInfo().then(async res => {

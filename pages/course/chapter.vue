@@ -8,7 +8,10 @@
 				<u-collapse-item :title="item.title" :name="item.id" v-for="(item, index) in chapterList" :key="index">
 					<u-list ref="videoListRef" @scrolltolower="scrolltolower" :height="videoListHeight">
 						<u-list-item v-for="(item, index) in videoList" :key="index">
-							<u-cell :title="item.title" @click="getVideoUrl(item)"></u-cell>
+							<u-cell :title="item.title" @click="getVideoUrl(item)">
+								<u-tag v-if="item.isFree" text="免费试听" size="mini" type="success" plain :absolute="false"
+									slot="right-icon"></u-tag>
+							</u-cell>
 						</u-list-item>
 					</u-list>
 				</u-collapse-item>
@@ -34,6 +37,7 @@
 		data() {
 			return {
 				courseId: '', //课程子目录id
+				courseIdlist: [], //该账号拥有的课程id列表
 				chapterList: [], //章节列表
 				videoList: [], //课程列表
 				videoListHeight: '250rpx', //videoList列表高度
@@ -43,6 +47,7 @@
 		},
 		onLoad: function(option) {
 			this.courseId = option.courseId
+			this.courseIdlist = this.$store.state.user.courseId
 			let chapterParam = {
 				courseId: this.courseId
 			}
@@ -112,6 +117,12 @@
 			},
 			//点击小节列表播放视频
 			async getVideoUrl(video) {
+				if (this.courseIdlist.indexOf(this.courseId) === -1) {
+					if (!video.isFree) {
+						this.$modal.msgError("请购买后观看")
+						return
+					}
+				}
 				let videoSourceId = video.videoSourceId
 				if (isNull(videoSourceId)) {
 					this.$modal.msgError("该小节还未上传视频")

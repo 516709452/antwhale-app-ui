@@ -42,6 +42,18 @@
 		  "style": {
 		     "navigationBarTitleText": "章节信息"
 		  }
+		},
+		{
+		  "path": "pages/search/index",
+		  "style": {
+		     "navigationStyle": "custom"
+		  }
+		},
+		{
+		  "path": "pages/me/info/mycourse",
+		  "style": {
+		     "navigationBarTitleText": "我的课程"
+		  }
 		}
 	],
 	"tabBar": {
