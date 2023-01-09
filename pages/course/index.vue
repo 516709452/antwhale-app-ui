@@ -93,7 +93,8 @@
 			//课程列表
 			getCourseInfo(subjectSon) {
 				let courseParam = {
-					subjectId: subjectSon.id
+					subjectId: subjectSon.id,
+					status: "Normal"
 				}
 				queryCourseInfo(courseParam).then(res => {
 					this.cousreList = res.data

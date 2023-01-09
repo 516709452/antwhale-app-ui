@@ -4,7 +4,8 @@ import constant from '@/utils/constant'
 import {
 	login,
 	logout,
-	getInfo
+	getInfo,
+	checkCaptcha
 } from '@/api/login'
 import {
 	getToken,
@@ -69,6 +70,12 @@ const user = {
 			const uuid = userInfo.uuid
 			return new Promise((resolve, reject) => {
 				login(username, password, code, uuid).then(res => {
+					const captchaMap = {
+						code: code,
+						uuid: uuid
+					}
+					checkCaptcha(captchaMap).then(
+						data => {})
 					setToken(res.data.accessToken)
 					commit('SET_TOKEN', res.data.accessToken)
 					resolve(res)

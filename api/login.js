@@ -46,3 +46,17 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+
+// 校验验证码
+export function checkCaptcha(data) {
+  return request({
+    'url': 'antwhale-auth-dowork/checkCaptcha',
+    headers: {
+      isToken: false
+    },
+	'data': data,
+    method: 'post',
+    timeout: 20000
+  })
+}
