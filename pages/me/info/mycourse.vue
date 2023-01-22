@@ -27,7 +27,9 @@
 		data() {
 			return {
 				cousreList: [], //课程列表
-				courseIds: this.$store.state.user.courseId
+				courseIds: this.$store.state.user.courseId,
+				current: 1,
+				size: 10,
 			}
 		},
 		onLoad() {
@@ -40,10 +42,12 @@
 					return
 				}
 				let courseParam = {
-					courseIdList: this.courseIds
+					courseIdList: this.courseIds,
+					currentPage: this.current,
+					pageSize: this.size
 				}
 				queryCourseInfo(courseParam).then(res => {
-					this.cousreList = res.data
+					this.cousreList = res.data.records
 				}).catch(
 					err => {
 						console.log(err)
@@ -64,9 +68,9 @@
 		overflow: hidden;
 		border: 1px #f5f5f5 solid;
 
-		image {
+	/* 	image {
 			width: 100%;
 			height: 100%;
-		}
+		} */
 	}
 </style>

@@ -1,6 +1,6 @@
 {
     "name" : "antwhale-app-ui",
-    "appid" : "__UNI__5322933",
+    "appid" : "__UNI__F557202",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -40,9 +40,13 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* SDK配置 */

@@ -1,0 +1,18 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+/* uni.scss */
+view.data-v-27d76bae, scroll-view.data-v-27d76bae, swiper-item.data-v-27d76bae {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+.u-list.data-v-27d76bae {
+  display: flex;
+  flex-direction: column;
+}
+

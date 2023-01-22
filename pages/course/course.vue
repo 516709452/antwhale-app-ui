@@ -4,23 +4,24 @@
 			<!-- <u-swiper :list="" keyName="url" :autoplay="false"></u-swiper> -->
 		</u-row>
 		<u-row>
-			<uni-card title="讲师姓名" :isFull="true" sub-title="高级运动营养师" extra="讲师信息" :thumbnail="avatar">
-				<text class="uni-body">力量训练是一切训练的基础</text>
+			<uni-card :is-shadow="true" margin="5px" :title="teacherInfo.name" :sub-title="teacherInfo.career" :extra="teacherInfo.level" :thumbnail="teacherInfo.avatar">
+				<text class="uni-body">{{teacherInfo.intro}}</text>
 			</uni-card>
 		</u-row>
 		<u-row>
 			<uni-section title="课程大纲" type="line" style="width: 100%;" titleFontSize="16px">
 				<u-collapse ref="collapseRef" @change="change" @close="close" @open="open" :accordion="true">
-					<u-collapse-item :title="item.title" :name="item.id" v-for="(item, index) in chapterList"
-						:key="index">
+					<u-collapse-item :title="itemChapter.title" :name="itemChapter.id"
+						v-for="(itemChapter, indexChapter) in chapterList" :key="indexChapter">
 						<u-list ref="videoListRef" @scrolltolower="scrolltolower" :height="videoListHeight">
-							<u-list-item v-for="(item, index) in videoList" :key="index">
-								<u-cell :title="item.title"></u-cell>
+							<u-list-item v-for="(itemVideo, indexVideo) in videoList" :key="indexVideo">
+								<u-cell :title="itemVideo.title"></u-cell>
 							</u-list-item>
 						</u-list>
 					</u-collapse-item>
 					<u-cell-group v-if="chapterList.length>=3">
-						<u-cell title="查看全部章节" titleStyle="text-align:center" isLink :url="`/pages/course/chapter?courseId=${courseId}`"></u-cell>
+						<u-cell title="查看全部章节" titleStyle="text-align:center" isLink
+							:url="`/pages/course/chapter?courseId=${courseId}`"></u-cell>
 					</u-cell-group>
 				</u-collapse>
 			</uni-section>
@@ -39,13 +40,20 @@
 		queryChapterInfo
 	} from '@/api/course/chapter.js'
 	import {
+		queryTeacherInfo
+	} from '@/api/course/teacher.js'
+	import {
 		isNull
 	} from '@/utils/validUtil.js'
 	export default {
 		data() {
 			return {
 				courseId: '', //课程子目录id
-				courseIdlist:[],//该账号拥有的课程id列表
+				teacherId: '', //课程讲师Id
+				current: 1,
+				size: 10,
+				courseIdlist: [], //该账号拥有的课程id列表
+				teacherInfo: {}, //讲师信息
 				chapterList: [], //章节列表
 				videoList: [], //课程列表
 				videoListHeight: '250rpx', //videoList列表高度
@@ -63,21 +71,33 @@
 		},
 		onLoad: function(option) {
 			this.courseId = option.courseId
+			this.teacherId = option.teacherId
 			this.courseIdlist = this.$store.state.user.courseId
-			if(this.courseIdlist.indexOf(this.courseId)!==-1){
+			if (this.courseIdlist.indexOf(this.courseId) !== -1) {
 				this.customButtonGroup[0].text = "立即观看"
-			}else{
+			} else {
 				this.customButtonGroup[0].text = "立即购课"
 			}
-			let chapterParam = {
-				courseId: this.courseId
+			let teacherParam = {
+				id: this.teacherId
 			}
-			queryChapterInfo(chapterParam).then(res => {
-				if(res.data.length>=3){
-					this.chapterList = res.data.slice(0,3)
-				}else{
-					this.chapterList = res.data
+			queryTeacherInfo(teacherParam).then(res => {
+				if(res.data.records.length>0){
+					this.teacherInfo = res.data.records[0]
 				}
+				let chapterParam = {
+					courseId: this.courseId,
+				}
+				queryChapterInfo(chapterParam).then(res => {
+					if (res.data.length >= 3) {
+						this.chapterList = res.data.slice(0, 3)
+					} else {
+						this.chapterList = res.data
+					}
+				}).catch(
+					err => {
+						console.log(err)
+					})
 			}).catch(
 				err => {
 					console.log(err)

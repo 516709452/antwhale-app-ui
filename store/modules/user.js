@@ -5,7 +5,7 @@ import {
 	login,
 	logout,
 	getInfo,
-	checkCaptcha
+	checkCaptcha,
 } from '@/api/login'
 import {
 	getToken,
@@ -75,10 +75,13 @@ const user = {
 						uuid: uuid
 					}
 					checkCaptcha(captchaMap).then(
-						data => {})
-					setToken(res.data.accessToken)
-					commit('SET_TOKEN', res.data.accessToken)
-					resolve(res)
+						data => {
+							setToken(res.data.accessToken)
+							commit('SET_TOKEN', res.data.accessToken)
+							resolve(res)
+						}).catch(error=>{
+							reject(error)
+						})
 				}).catch(error => {
 					reject(error)
 				})

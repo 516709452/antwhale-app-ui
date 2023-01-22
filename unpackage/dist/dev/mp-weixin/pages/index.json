@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "my-video": "/components/mycomponents/my-video/my-video"
+  }
 }

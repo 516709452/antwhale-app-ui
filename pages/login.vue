@@ -20,6 +20,7 @@
 			</view>
 			<view class="action-btn">
 				<button @click="handleLogin" class="login-btn cu-btn block bg-blue lg round">登录</button>
+				<!-- <button style="margin-top: 20rpx;" @click="handleRegister" class="login-btn cu-btn block bg-gray lg round">注册</button> -->
 			</view>
 		</view>
 
@@ -95,6 +96,9 @@
 					this.pwdLogin()
 				}
 			},
+			async handleRegister(){
+				this.$tab.navigateTo('/pages/me/info/index')
+			},
 			// 密码登录
 			async pwdLogin() {
 				this.$store.dispatch('Login', this.loginForm).then(res => {
@@ -110,9 +114,9 @@
 
 				}).catch(() => {
 					this.$modal.closeLoading()
-					if (this.cacheswitch) {
+					// if (this.cacheswitch) {
 						this.getCode()
-					}
+					// }
 				})
 			},
 			// 登录成功后，处理函数

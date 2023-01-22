@@ -28,21 +28,25 @@
 
 		<view class="content-section">
 			<view class="mine-actions grid col-4 text-center">
-				<view class="action-item" @click="handleMyOrder">
-					<view class="iconfont icon-friendfill text-pink icon"></view>
+				<view class="action-item" @click="handleBuilding">
+					<!-- <view class="iconfont icon-friendfill text-pink icon"></view> -->
+					<uni-icons type="cart" size="35"></uni-icons>
 					<text class="text">我的订单</text>
 				</view>
 				<view class="action-item" @click="handleMyCourse">
-					<view class="iconfont icon-service text-blue icon"></view>
+					<!-- <view class="iconfont icon-service text-blue icon"></view> -->
+					<uni-icons type="videocam" size="35"></uni-icons>
 					<text class="text">我的课程</text>
 				</view>
 				<view class="action-item" @click="handleBuilding">
-					<view class="iconfont icon-community text-mauve icon"></view>
+					<!-- <view class="iconfont icon-community text-mauve icon"></view> -->
+					<uni-icons type="wallet" size="35"></uni-icons>
 					<text class="text">我的资料</text>
 				</view>
 				<view class="action-item" @click="handleBuilding">
-					<view class="iconfont icon-dianzan text-green icon"></view>
-					<text class="text">鲸战队</text>
+					<!-- <view class="iconfont icon-dianzan text-green icon"></view> -->
+					<uni-icons type="bars" size="35"></uni-icons>
+					<text class="text">我的计划</text>
 				</view>
 			</view>
 			<view class="menu-list">
@@ -114,6 +118,9 @@
 			},
 			handleToAvatar() {
 				this.$tab.navigateTo('/pages/me/avatar/index')
+			},
+			handleBuilding(){
+				this.$modal.showToast("功能建设中...")
 			},
 			handleLogout() {
 				this.$modal.confirm('确定注销并退出系统吗？').then(() => {

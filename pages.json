@@ -83,7 +83,8 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarBackgroundColor": "#FFFFFF"
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"onReachBottomDistance": 50
 	},
 	"easycom": {
 			"custom": {

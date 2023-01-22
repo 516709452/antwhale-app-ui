@@ -1,16 +1,20 @@
 <template>
 	<view>
-		<view id="J_prismPlayer">
-
+		<view v-if="playURL">
+			<video id="myVideo" class="myVideoStyle" :src="playURL" controls></video>
 		</view>
+		<!-- <view id="J_prismPlayer">
+
+		</view> -->
 		<uni-section title="课程大纲" type="line" style="width: 100%;" titleFontSize="16px">
 			<u-collapse ref="collapseRef" @change="change" @close="close" @open="open" :accordion="true">
-				<u-collapse-item :title="item.title" :name="item.id" v-for="(item, index) in chapterList" :key="index">
+				<u-collapse-item :title="itemChapter.title" :name="itemChapter.id"
+					v-for="(itemChapter, indexChapter) in chapterList" :key="indexChapter">
 					<u-list ref="videoListRef" @scrolltolower="scrolltolower" :height="videoListHeight">
-						<u-list-item v-for="(item, index) in videoList" :key="index">
-							<u-cell :title="item.title" @click="getVideoUrl(item)">
-								<u-tag v-if="item.isFree" text="免费试听" size="mini" type="success" plain :absolute="false"
-									slot="right-icon"></u-tag>
+						<u-list-item v-for="(itemVideo, indexVideo) in videoList" :key="indexVideo">
+							<u-cell :title="itemVideo.title" @click="getVideoUrl(itemVideo)">
+								<u-tag v-if="itemVideo.isFree" text="免费试听" size="mini" type="success" plain
+									:absolute="false" slot="right-icon"></u-tag>
 							</u-cell>
 						</u-list-item>
 					</u-list>
@@ -31,9 +35,7 @@
 	import {
 		isNull
 	} from '@/utils/validUtil.js'
-	import myVideo from '@/components/mycomponents/my-video/my-video.vue'
 	export default {
-
 		data() {
 			return {
 				courseId: '', //课程子目录id
@@ -106,9 +108,11 @@
 			async getVodAliyunAddress(vodAliyunAddressParamDTO) {
 				await queryVodAliyunAddress(vodAliyunAddressParamDTO).then(res => {
 					this.playURL = res.data.body.playInfoList.playInfo[0].playURL
+					
 					setTimeout(() => {
-						console.log(this.playURL)
-						this.getLive()
+						this.videoContext = uni.createVideoContext('myVideo')
+						this.videoContext.stop()
+						this.videoContext.play()
 					}, 60)
 				}).catch(
 					err => {
@@ -131,7 +135,7 @@
 				let vodAliyunAddressParamDTO = {
 					videoId: videoSourceId
 				}
-				this.videoPlayer.dispose();
+				// this.videoPlayer.dispose();
 				await this.getVodAliyunAddress(vodAliyunAddressParamDTO);
 			}
 		}
@@ -139,4 +143,7 @@
 </script>
 
 <style lang="scss" scoped>
+	.myVideoStyle {
+		width: 100%
+	}
 </style>

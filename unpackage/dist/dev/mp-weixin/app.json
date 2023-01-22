@@ -2,8 +2,13 @@
   "pages": [
     "pages/login",
     "pages/index",
+    "pages/course/index",
     "pages/me/index",
-    "pages/me/info/index"
+    "pages/me/info/index",
+    "pages/course/course",
+    "pages/course/chapter",
+    "pages/search/index",
+    "pages/me/info/mycourse"
   ],
   "subPackages": [],
   "window": {
@@ -23,6 +28,12 @@
         "text": "首页"
       },
       {
+        "pagePath": "pages/course/index",
+        "iconPath": "static/images/tabbar/work.png",
+        "selectedIconPath": "static/images/tabbar/work_.png",
+        "text": "课程"
+      },
+      {
         "pagePath": "pages/me/index",
         "iconPath": "static/images/tabbar/mine.png",
         "selectedIconPath": "static/images/tabbar/mine_.png",
@@ -30,6 +41,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }
